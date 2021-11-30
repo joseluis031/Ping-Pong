@@ -69,6 +69,16 @@ class RaquetaPong:
             self.y = 0
         if self.y + self.alto >= VENTANA_VERT:
             self.y = VENTANA_VERT - self.alto
+
+    def mover_ia(self, pelota):
+        if self.y > pelota.y:
+            self.dir_y = -3
+        elif self.y < pelota.y:
+            self.dir_y = 3
+        else:
+            self.dir_y = 0
+
+        self.y += self.dir_y
     
     def golpear(self, pelota):
         if (
@@ -79,6 +89,16 @@ class RaquetaPong:
         ):
             pelota.dir_x = -pelota.dir_x
             pelota.x = self.x + self.ancho
+
+    def golpear_ia(self, pelota):
+        if (
+            pelota.x + pelota.ancho > self.x
+            and pelota.x < self.x + self.ancho
+            and pelota.y + pelota.alto > self.y
+            and pelota.y < self.y + self.alto
+        ):
+            pelota.dir_x = -pelota.dir_x
+            pelota.x = self.x - pelota.ancho
 
 def main():
     # Inicialización de Pygame
@@ -102,8 +122,10 @@ def main():
         pelota.mover()
         pelota.rebotar()
         raqueta_1.mover()
+        raqueta_2.mover_ia(pelota)
         raqueta_1.golpear(pelota)
-
+        raqueta_2.golpear_ia(pelota)
+        
         ventana.fill(BLANCO)
         ventana.blit(pelota.imagen, (pelota.x, pelota.y))
         ventana.blit(raqueta_1.imagen, (raqueta_1.x, raqueta_1.y))
