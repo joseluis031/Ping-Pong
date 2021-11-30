@@ -46,6 +46,7 @@ class PelotaPong:
         self.y = VENTANA_VERT / 2 - self.alto / 2
         self.dir_x = -self.dir_x
         self.dir_y = random.choice([-5, 5])
+
 class RaquetaPong:
     def __init__(self):
         self.imagen = pygame.image.load("raqueta.png").convert_alpha()
@@ -64,6 +65,10 @@ class RaquetaPong:
 
     def mover(self):
         self.y += self.dir_y
+        if self.y <= 0:
+            self.y = 0
+        if self.y + self.alto >= VENTANA_VERT:
+            self.y = VENTANA_VERT - self.alto
 
 def main():
     # Inicialización de Pygame
@@ -95,6 +100,20 @@ def main():
         for event in pygame.event.get():
             if event.type == QUIT:
                 jugando = False
+            
+            # Detecta que se ha pulsado una tecla
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_w:
+                    raqueta_1.dir_y = -5
+                if event.key == pygame.K_s:
+                    raqueta_1.dir_y = 5
+
+            # Detecta que se ha soltado la tecla
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_w:
+                    raqueta_1.dir_y = 0
+                if event.key == pygame.K_s:
+                    raqueta_1.dir_y = 0
 
         pygame.display.flip()
         pygame.time.Clock().tick(FPS)
